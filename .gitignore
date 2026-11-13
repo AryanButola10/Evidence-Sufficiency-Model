@@ -1,0 +1,127 @@
+# ============================================================
+# Python
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# ============================================================
+# Secrets & Environment
+# ============================================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# ============================================================
+# Data & Models (too large for git)
+# ============================================================
+data/raw/
+data/processed/
+data/datasets/hotpotqa/
+data/datasets/ragtruth/
+models/
+*.bin
+*.safetensors
+*.gguf
+*.onnx
+*.pt
+*.pth
+
+# ============================================================
+# Experiment Outputs
+# ============================================================
+experiments/results/
+mlruns/
+mlflow.db
+*.mlflow
+
+# ============================================================
+# Node.js / Next.js
+# ============================================================
+node_modules/
+.next/
+out/
+.npm
+.yarn-integrity
+frontend/.env
+frontend/.env.local
+frontend/.env.production
+
+# ============================================================
+# macOS
+# ============================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+Thumbs.db
+
+# ============================================================
+# IDE
+# ============================================================
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================================================
+# Logs
+# ============================================================
+logs/
+*.log
+*.log.*
+
+# ============================================================
+# Qdrant local storage
+# ============================================================
+qdrant_storage/
+.qdrant/
+
+# ============================================================
+# Jupyter
+# ============================================================
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# ============================================================
+# Docker
+# ============================================================
+postgres_data/
