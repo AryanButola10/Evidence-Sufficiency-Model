@@ -14,7 +14,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Project root — two levels up from this file
@@ -81,18 +81,17 @@ class Settings(BaseSettings):
     # -----------------------------------------------------------
     # CORS
     # -----------------------------------------------------------
+    # IMPORTANT: In your .env file, this MUST be a JSON array:
+    #   CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
+    # pydantic-settings v2 decodes list[str] fields from JSON format.
+    # A plain comma-separated string will cause a startup crash.
     cors_origins: list[str] = Field(
         default=["http://localhost:3000", "http://127.0.0.1:3000"],
-        description="Allowed origins for CORS. Comma-separated in .env.",
+        description=(
+            'Allowed CORS origins. In .env use JSON array: '
+            '["http://localhost:3000","http://127.0.0.1:3000"]'
+        ),
     )
-
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, v: str | list[str]) -> list[str]:
-        """Allow CORS_ORIGINS as a comma-separated string in .env."""
-        if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v
 
     # -----------------------------------------------------------
     # Qdrant (Phase 3+)

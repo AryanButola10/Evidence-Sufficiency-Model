@@ -51,9 +51,11 @@ class TestSettings:
         # Should not raise
         s.validate_llm_config()
 
-    def test_cors_origins_parsed_from_string(self):
-        """CORS origins should be parseable from comma-separated string."""
-        s = Settings(cors_origins="http://localhost:3000,http://localhost:3001")
+    def test_cors_origins_accepts_list(self):
+        """CORS origins must be passed as a list (pydantic-settings v2 requirement).
+        In .env, use JSON format: CORS_ORIGINS=["http://localhost:3000"]
+        """
+        s = Settings(cors_origins=["http://localhost:3000", "http://localhost:3001"])
         assert "http://localhost:3000" in s.cors_origins
         assert "http://localhost:3001" in s.cors_origins
 

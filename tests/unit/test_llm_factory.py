@@ -16,6 +16,8 @@ from unittest.mock import patch, MagicMock
 
 from src.generation.llm_provider import LLMProvider, LLMResponse
 from src.generation.llm_factory import LLMFactory
+from src.generation.ollama_provider import OllamaProvider
+from src.generation.groq_provider import GroqProvider
 
 
 class TestLLMResponse:
@@ -49,35 +51,24 @@ class TestLLMResponse:
 class TestLLMFactory:
     """Tests for the LLM provider factory."""
 
-    @patch("src.generation.llm_factory.OllamaProvider")
-    def test_factory_creates_ollama_provider(self, mock_ollama):
+    @patch("src.generation.ollama_provider.OllamaProvider.__init__", return_value=None)
+    def test_factory_creates_ollama_provider(self, mock_init):
         """Factory should create OllamaProvider when provider='ollama'."""
-        mock_instance = MagicMock(spec=LLMProvider)
-        mock_ollama.return_value = mock_instance
-
         result = LLMFactory.create(provider="ollama")
+        mock_init.assert_called_once()
+        assert isinstance(result, OllamaProvider)
 
-        mock_ollama.assert_called_once()
-        assert result == mock_instance
-
-    @patch("src.generation.llm_factory.GroqProvider")
+    @patch("src.generation.groq_provider.GroqProvider.__init__", return_value=None)
     @patch("src.generation.llm_factory.settings")
-    def test_factory_creates_groq_provider(self, mock_settings, mock_groq):
+    def test_factory_creates_groq_provider(self, mock_settings, mock_init):
         """Factory should create GroqProvider when provider='groq'."""
         mock_settings.llm_provider = "groq"
         mock_settings.groq_api_key = "test_key"
-
-        def mock_validate():
-            pass  # No-op — key is present
-
-        mock_settings.validate_llm_config = mock_validate
-        mock_instance = MagicMock(spec=LLMProvider)
-        mock_groq.return_value = mock_instance
-
+        mock_settings.validate_llm_config = lambda: None
+        mock_settings.groq_model = "llama-3.3-70b-versatile"
         result = LLMFactory.create(provider="groq")
-
-        mock_groq.assert_called_once()
-        assert result == mock_instance
+        mock_init.assert_called_once()
+        assert isinstance(result, GroqProvider)
 
     def test_factory_raises_for_unknown_provider(self):
         """Factory should raise ValueError for unknown provider names."""
