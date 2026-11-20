@@ -12,6 +12,11 @@ uvicorn[standard]>=0.29.0
 python-multipart>=0.0.9       # Required for file uploads
 
 # -----------------------------------------------------------
+# Phase 2 — Document processing
+# -----------------------------------------------------------
+PyMuPDF>=1.24.0               # PDF text extraction (imports as fitz)
+
+# -----------------------------------------------------------
 # Configuration & environment
 # -----------------------------------------------------------
 pydantic>=2.7.0

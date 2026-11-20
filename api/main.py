@@ -52,6 +52,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
                 model=settings.ollama_dev_model if settings.llm_provider == "ollama"
                 else settings.groq_model)
     logger.info("API: http://{host}:{port}", host=settings.api_host, port=settings.api_port)
+    logger.info("Phase: 2 — Document Processing active")
 
     # Validate LLM config (raises ValueError if misconfigured)
     try:
@@ -120,8 +121,8 @@ async def health_check() -> dict:
     """
     return {
         "status": "ok",
-        "version": "0.1.0",
-        "phase": "Phase 1 — Environment Setup",
+        "version": "0.2.0",
+        "phase": "Phase 2 — Document Processing",
         "llm_provider": settings.llm_provider,
         "active_model": (
             settings.ollama_dev_model
@@ -130,7 +131,7 @@ async def health_check() -> dict:
         ),
         "qdrant_mode": "in-memory" if not settings.use_persistent_qdrant else "persistent",
         "components_active": {
-            "document_processing": False,   # Phase 2
+            "document_processing": True,    # Phase 2 ✅
             "hybrid_retrieval": False,      # Phase 3
             "evidence_evaluation": False,   # Phase 4
             "evidence_sufficiency_model": False,  # Phase 5
@@ -156,12 +157,16 @@ async def root() -> dict:
 
 
 # ----------------------------------------------------------------
-# Router Registration (Phase 2+)
-# Uncomment each router as the corresponding phase is implemented
+# Router Registration
 # ----------------------------------------------------------------
-# from api.routers import documents, query, evaluation
-# app.include_router(documents.router, prefix="/api/documents", tags=["Documents"])
-# app.include_router(query.router, prefix="/api/query", tags=["Query"])
+from api.routers import documents  # noqa: E402
+app.include_router(
+    documents.router,
+    prefix="/api/documents",
+    tags=["Documents"],
+)
+# Phase 3+ routers added as phases are completed:
+# app.include_router(query.router,      prefix="/api/query",      tags=["Query"])
 # app.include_router(evaluation.router, prefix="/api/evaluation", tags=["Evaluation"])
 
 
