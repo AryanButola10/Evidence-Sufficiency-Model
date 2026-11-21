@@ -29,7 +29,7 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
-import fitz  # PyMuPDF
+import pymupdf # PyMuPDF
 
 from config import get_logger
 from src.document_processing.chunker import SentenceAwareChunker, ChunkingConfig
